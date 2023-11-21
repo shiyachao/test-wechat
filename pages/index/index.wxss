@@ -1,0 +1,30 @@
+/**index.wxss**/
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.scrollarea {
+  flex: 1;
+  overflow-y: hidden;
+}
+.btn-wrap button{
+  margin-bottom: 30rpx;
+}
+.btn-wrap{
+  margin-bottom:30rpx;
+}
+.add{
+  width:70%;
+  padding:20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border:2rpx solid #eee;
+}
+.add .input{
+  background-color: #eee;
+  height:70rpx;
+  margin-bottom: 20rpx;
+}

@@ -1,0 +1,15 @@
+<!--index.wxml-->
+<navigation-bar title="Weixin" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container">
+    <view class="btn-wrap">
+      <button bind:tap="random">随机生成</button>
+      <button bind:tap="fromData">分析生成</button>
+    </view>
+    <view class="add" wx:if="{{showAdd}}">
+      <input class="input" bindinput="addDataInput"/>
+      <button bind:tap="addData">确定</button>
+    </view>
+    <view>{{ result }}</view>
+  </view>
+</scroll-view>
