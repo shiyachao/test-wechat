@@ -30,28 +30,52 @@ Page({
     countPre = countPre.map((item,index)=>{
       return {
         num: index + 1,
-        count: 0
+        count: 0,
+        skip: 0,
+        skipStop:false
       }
     })
     let countAft = new Array(12).fill(0);
     countAft = countAft.map((item,index)=>{
       return {
         num: index + 1,
-        count: 0
+        count: 0,
+        skip: 0,
+        skipStop: false
       }
     })
     const space = {};
     data.forEach(item=>{
+      countPre.map(item=>{
+        if(!item.skipStop){
+          item.skip += 1;
+        }
+        return item;
+      })
+      countAft.map(item=>{
+        if(!item.skipStop){
+          item.skip += 1;
+        }
+        return item;
+      })
       const halfPre = item.slice(0,5);
       const halfAft = item.slice(-2);
       const pre = halfPre.filter(num=>Number(num)>=1 && Number(num) <= 12);
       const middle = halfPre.filter(num=>Number(num)>=13 && Number(num) <= 24);
       const aft = halfPre.filter(num=>Number(num)>=25 && Number(num) <= 35);
       halfPre.forEach(num=>{
-        countPre[num-1].count = countPre[num-1].count + 1;
+        countPre[num-1].count += 1;
+        if(!countPre[num-1].skipStop){
+          countPre[num-1].skip -= 1;
+        }
+        countPre[num-1].skipStop = true;
       })
       halfAft.forEach(num=>{
-        countAft[num-1].count = countAft[num-1].count + 1;
+        countAft[num-1].count += 1;
+        if(!countAft[num-1].skipStop){
+          countAft[num-1].skip -= 1;
+        }
+        countAft[num-1].skipStop = true;
       })
       const key = [pre.length,middle.length,aft.length].join(',');
       if(space[key]){
@@ -66,12 +90,12 @@ Page({
     })
     const [preTotal, middleTotal, aftTotal] = spaceKeys[1].split(",");
     const preArr = countPre.slice(0,13);
-    preArr.sort((a,b)=>a.count - b.count);
+    preArr.sort(this.sortByCountAndSkip);
     const middleArr = countPre.slice(13,24);
-    middleArr.sort((a,b)=>a.count - b.count);
+    middleArr.sort(this.sortByCountAndSkip);
     const aftArr = countPre.slice(25);
-    aftArr.sort((a,b)=>a.count - b.count);
-    countAft.sort((a,b)=>a.count-b.count);
+    aftArr.sort(this.sortByCountAndSkip);
+    countAft.sort(this.sortByCountAndSkip);
 
     const result = [];
     for(let i = 0; i< preTotal; i++){
@@ -95,6 +119,41 @@ Page({
       }
     }).join(',');
     this.setData({result: resultStr});
+  },
+  sortByCountAndSkip(a,b){
+    // if(a.count === b.count){
+    //   return b.skip - a.skip;
+    // }else{
+    //   return a.count - b.count
+    // }
+    const ar = a.skip - a.count;
+    const br = b.skip - b.count;
+    if(ar > 0 && br > 0){
+      if(ar === br){
+        if(b.skip === a.skip){
+          return a.count - b.count;
+        }else{
+          return b.skip - a.skip;
+        }
+      }else{
+        return br - ar;
+      }
+    }else if(ar < 0 && br < 0){
+      if(ar === br){
+        if(b.skip === a.skip){
+          return a.count - b.count;
+        }else{
+          return b.skip - a.skip;
+        }
+      }else{
+        return Math.abs(ar) - Math.abs(br);
+      }
+    }else if(ar < 0){
+      return 1;
+    }else if(br < 0){
+      return -1;
+    }
+    return Math.abs(br) - Math.abs(ar);
   },
   addDataInput(e){
     this.setData({addValue: e.detail.value});
