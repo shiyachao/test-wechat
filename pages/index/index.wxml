@@ -10,6 +10,37 @@
       <input class="input" bindinput="addDataInput"/>
       <button bind:tap="addData">确定</button>
     </view>
+    <input class="input" bindinput="spaceInput"/>
     <view>{{ result }}</view>
+    <view class="resultTable">
+      <view class="table">
+        <view class="td" wx:for="{{preArr}}" wx:key="index" wx:for-index="index" wx:for-item="item">
+          <view class="span">{{item.num}}</view>
+          <view class="span">{{item.count}}</view>
+          <view class="span">{{item.skip}}</view>
+        </view>
+      </view>
+      <view class="table">
+        <view class="td" wx:for="{{middleArr}}" wx:key="index" wx:for-index="index" wx:for-item="item">
+          <view class="span">{{item.num}}</view>
+          <view class="span">{{item.count}}</view>
+          <view class="span">{{item.skip}}</view>
+        </view>
+      </view>
+      <view class="table">
+        <view class="td" wx:for="{{aftArr}}" wx:key="index" wx:for-index="index" wx:for-item="item">
+          <view class="span">{{item.num}}</view>
+          <view class="span">{{item.count}}</view>
+          <view class="span">{{item.skip}}</view>
+        </view>
+      </view>
+      <view class="table">
+        <view class="td" wx:for="{{countAft}}" wx:key="index" wx:for-index="index" wx:for-item="item">
+          <view class="span">{{item.num}}</view>
+          <view class="span">{{item.count}}</view>
+          <view class="span">{{item.skip}}</view>
+        </view>
+      </view>
+    </view>
   </view>
 </scroll-view>

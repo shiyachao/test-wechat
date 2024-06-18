@@ -11,9 +11,6 @@ page {
 .btn-wrap button{
   margin-bottom: 30rpx;
 }
-.btn-wrap{
-  margin-bottom:30rpx;
-}
 .add{
   width:70%;
   padding:20rpx;
@@ -23,8 +20,32 @@ page {
   justify-content: center;
   border:2rpx solid #eee;
 }
-.add .input{
+.input{
   background-color: #eee;
   height:70rpx;
   margin-bottom: 20rpx;
+  width:100vw
+}
+.resultTable{
+  width:100vw;
+}
+.resultTable .table{
+  margin-top: 30rpx;
+  display: flex;
+  border-left: 1rpx solid #c7c7c7;
+  border-top: 1rpx solid #c7c7c7;
+}
+.table .td{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.table .td .span{
+  text-align: center;
+  padding: 10rpx 0;
+  border-right: 1rpx solid #c7c7c7;
+  border-bottom: 1rpx solid #c7c7c7;
+}
+.table .td .span:first-child{
+  color:red;
 }

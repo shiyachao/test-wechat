@@ -4,6 +4,11 @@ Page({
     result:"",
     showAdd:false,
     addValue:"",
+    preArr: [],
+    middleArr: [],
+    aftArr: [],
+    countAft: [],
+    space: ''
   },
   fromData(){
     const that = this;
@@ -88,28 +93,40 @@ Page({
     spaceKeys.sort((a,b)=>{
       return space[b] - space[a];
     })
-    const [preTotal, middleTotal, aftTotal] = spaceKeys[1].split(",");
-    const preArr = countPre.slice(0,13);
+    const [preTotal, middleTotal, aftTotal] = this.data.space ? this.data.space.split('') :spaceKeys[1].split(",");
+    const preArr = countPre.slice(0,12);
     preArr.sort(this.sortByCountAndSkip);
-    const middleArr = countPre.slice(13,24);
+    const middleArr = countPre.slice(12,24);
     middleArr.sort(this.sortByCountAndSkip);
-    const aftArr = countPre.slice(25);
+    const aftArr = countPre.slice(24);
     aftArr.sort(this.sortByCountAndSkip);
     countAft.sort(this.sortByCountAndSkip);
+    this.setData({
+      preArr,
+      middleArr,
+      aftArr,
+      countAft
+    })
 
     const result = [];
-    for(let i = 0; i< preTotal; i++){
-      result.push(preArr[i]);
+    const preArrChunk = this.chunkArray(preArr, +preTotal);
+    for(let i = 0; i< preArrChunk.length; i++){
+      const item = this.getRandomNum(preArrChunk[i]);
+      result.push(item);
     }
-    for(let i = 0; i< middleTotal; i++){
-      result.push(middleArr[i]);
+    const middleArrChunk = this.chunkArray(middleArr, +middleTotal);
+    for(let i = 0; i< middleArrChunk.length; i++){
+      const item = this.getRandomNum(middleArrChunk[i]);
+      result.push(item);
     }
-    for(let i = 0; i< aftTotal; i++){
-      result.push(aftArr[i]);
+    const aftArrChunk = this.chunkArray(aftArr, +aftTotal);
+    for(let i = 0; i< aftArrChunk.length; i++){
+      const item = this.getRandomNum(aftArrChunk[i]);
+      result.push(item);
     }
     const resultArr = result.map(item=>item.num);
     resultArr.sort((a,b)=> a - b);
-    const halfAftResult = countAft.slice(0,2).map(item=>item.num);
+    let halfAftResult = this.getRandomNum2(countAft.slice(0,Math.floor(countAft.length/2))).map(item=>item.num);
     halfAftResult.sort((a,b)=> a - b);
     const resultStr = resultArr.concat(halfAftResult).map(item=>{
       if(item < 10){
@@ -121,39 +138,39 @@ Page({
     this.setData({result: resultStr});
   },
   sortByCountAndSkip(a,b){
-    // if(a.count === b.count){
-    //   return b.skip - a.skip;
-    // }else{
-    //   return a.count - b.count
-    // }
-    const ar = a.skip - a.count;
-    const br = b.skip - b.count;
-    if(ar > 0 && br > 0){
-      if(ar === br){
-        if(b.skip === a.skip){
-          return a.count - b.count;
-        }else{
-          return b.skip - a.skip;
-        }
-      }else{
-        return br - ar;
-      }
-    }else if(ar < 0 && br < 0){
-      if(ar === br){
-        if(b.skip === a.skip){
-          return a.count - b.count;
-        }else{
-          return b.skip - a.skip;
-        }
-      }else{
-        return Math.abs(ar) - Math.abs(br);
-      }
-    }else if(ar < 0){
-      return 1;
-    }else if(br < 0){
-      return -1;
+    if(a.count === b.count){
+      return b.skip - a.skip;
+    }else{
+      return b.count - a.count
     }
-    return Math.abs(br) - Math.abs(ar);
+    // const ar = a.skip - a.count;
+    // const br = b.skip - b.count;
+    // if(ar > 0 && br > 0){
+    //   if(ar === br){
+    //     if(b.skip === a.skip){
+    //       return a.count - b.count;
+    //     }else{
+    //       return b.skip - a.skip;
+    //     }
+    //   }else{
+    //     return br - ar;
+    //   }
+    // }else if(ar < 0 && br < 0){
+    //   if(ar === br){
+    //     if(b.skip === a.skip){
+    //       return a.count - b.count;
+    //     }else{
+    //       return b.skip - a.skip;
+    //     }
+    //   }else{
+    //     return Math.abs(ar) - Math.abs(br);
+    //   }
+    // }else if(ar < 0){
+    //   return 1;
+    // }else if(br < 0){
+    //   return -1;
+    // }
+    // return Math.abs(br) - Math.abs(ar);
   },
   addDataInput(e){
     this.setData({addValue: e.detail.value});
@@ -197,5 +214,42 @@ Page({
   },
   getNum(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + 1;
+  },
+
+  chunkArray(array, num) {
+    const chunkSize = Math.floor(array.length / num);
+    let result = [];
+    for (let i = 0; i < num; i ++) {
+      if(i === num - 1){
+        result.push(array.slice(i * chunkSize))
+      }else{
+        result.push(array.slice(i * chunkSize, (i + 1) * chunkSize));
+      }
+    }
+    return result;
+  },
+  //生成0 - num 的随机数字
+  getRandomNum(arr){
+    const index = Math.floor(Math.random() * arr.length);
+    const num = arr[index];
+    if(num.skip === 0){
+      return this.getRandomNum(arr);
+    }else{
+      return num;
+    }
+  },
+  getRandomNum2(arr){
+    const num1 = this.getRandomNum(arr);
+    const num2 = this.getRandomNum(arr);
+    if(num1.num === num2.num){
+      return this.getRandomNum2(arr)
+    }else{
+      return [num1, num2];
+    }
+  },
+  spaceInput(e){
+    this.setData({
+      space: e.detail.value
+    })
   }
 })
