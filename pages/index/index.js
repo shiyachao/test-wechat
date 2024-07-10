@@ -93,7 +93,9 @@ Page({
     spaceKeys.sort((a,b)=>{
       return space[b] - space[a];
     })
-    const [preTotal, middleTotal, aftTotal] = this.data.space ? this.data.space.split('') :spaceKeys[1].split(",");
+    const spaceKeyLength = spaceKeys.length > 5 ? 5 : spaceKeys.length;
+    const spaceKeyIndex = Math.floor(Math.random() * spaceKeyLength);
+    const [preTotal, middleTotal, aftTotal] = this.data.space ? this.data.space.split('') :spaceKeys[spaceKeyIndex].split(",");
     const preArr = countPre.slice(0,12);
     preArr.sort(this.sortByCountAndSkip);
     const middleArr = countPre.slice(12,24);
