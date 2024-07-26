@@ -112,17 +112,17 @@ Page({
 
     const result = [];
     const preArrChunk = this.chunkArray(preArr, +preTotal);
-    for(let i = 0; i< preArrChunk.length; i++){
+    for(let i = 0; i< +preTotal; i++){
       const item = this.getRandomNum(preArrChunk[i]);
       result.push(item);
     }
     const middleArrChunk = this.chunkArray(middleArr, +middleTotal);
-    for(let i = 0; i< middleArrChunk.length; i++){
+    for(let i = 0; i< +middleTotal; i++){
       const item = this.getRandomNum(middleArrChunk[i]);
       result.push(item);
     }
     const aftArrChunk = this.chunkArray(aftArr, +aftTotal);
-    for(let i = 0; i< aftArrChunk.length; i++){
+    for(let i = 0; i< +aftTotal; i++){
       const item = this.getRandomNum(aftArrChunk[i]);
       result.push(item);
     }
@@ -219,6 +219,7 @@ Page({
   },
 
   chunkArray(array, num) {
+    num = num === 1 ? 2 : num;
     const chunkSize = Math.floor(array.length / num);
     let result = [];
     for (let i = 0; i < num; i ++) {
